@@ -1,5 +1,5 @@
 USTH ICT 2021 Android Application Development
-=====================================================
+=============================================
 
 Students are expected to:
 
@@ -8,9 +8,14 @@ Students are expected to:
 * Push your commits regularly, with proper commit messages
 
 Student Info
-=======================
+============
 
-* Name: *YourNameHere*
-* ID: *YourIdHere*
-* Group ID: *Your Group ID here*
+* Name: Ngô Ngọc Đức Huy
+* ID: BI9-119
+* Group ID: 1
+
+Group Project
+=============
+
+[MiniGH](https://github.com/Huy-Ngo/MiniGH)
 
