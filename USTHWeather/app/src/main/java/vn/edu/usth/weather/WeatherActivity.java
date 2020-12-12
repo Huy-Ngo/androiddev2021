@@ -13,7 +13,7 @@ public class WeatherActivity extends AppCompatActivity {
         setContentView(R.layout.activity_weather);
         ForecastFragment forecastFragment = new ForecastFragment();
         Bundle args = new Bundle();
-        args.putString("bgColor", "blue");
+        args.putString("bgColor", "grey");
         forecastFragment.setArguments(args);
         getSupportFragmentManager().beginTransaction().setReorderingAllowed(true).add(
                 R.id.fragment_forecast, forecastFragment).commit();
