@@ -55,13 +55,13 @@ public class ForecastFragment extends Fragment {
         int color;
         switch (mBgColor) {
             case "red":
-                color = 0x90FF0000;
+                color = 0x90FFC0CB;
                 break;
             case "green":
-                color = 0x9000FF00;
+                color = 0x9090EE90;
                 break;
             case "blue":
-                color = 0x900000FF;
+                color = 0x90ADD8E6;
                 break;
             default:
                 color = 0x90AAAAAA;
