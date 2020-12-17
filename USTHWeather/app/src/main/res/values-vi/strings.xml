@@ -1,0 +1,43 @@
+<resources>
+    <string name="app_name">USTH Thời tiết</string>
+    <string name="action_settings">Cài đặt</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="next">Tiếp</string>
+    <string name="previous">Trước</string>
+
+    <!-- Days in week -->
+    <string name="monday">Thứ hai</string>
+    <string name="tuesday">Thứ ba</string>
+    <string name="wednesday">Thứ tư</string>
+    <string name="thursday">Thứ năm</string>
+    <string name="friday">Thứ sáu</string>
+    <string name="saturday">Thứ bảy</string>
+    <string name="sunday">Chủ nhật</string>
+
+    <!-- Days in week abbreviation -->
+    <string name="monday_short">T2</string>
+    <string name="tuesday_short">T3</string>
+    <string name="wednesday_short">T4</string>
+    <string name="thursday_short">T5</string>
+    <string name="friday_short">T6</string>
+    <string name="saturday_short">T7</string>
+    <string name="sunday_short">CN</string>
+
+    <!-- Weathers -->
+    <string name="cloud">Mây</string>
+    <string name="sun">Nắng</string>
+    <string name="rain">Mưa</string>
+    <string name="storm">Bão</string>
+    <string name="hail">Mưa đá</string>
+
+    <!-- Cities -->
+    <string name="hanoi">Hà Nội</string>
+    <string name="paris">Paris</string>
+    <string name="toulouse">Toulouse</string>
+
+    <!-- Cities, Countries -->
+
+    <string name="hanoi_full">Hà Nội, Việt Nam</string>
+    <string name="paris_full">Paris, Pháp</string>
+    <string name="toulouse_full">Toulouse, Pháp</string>
+</resources>

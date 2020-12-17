@@ -1,0 +1,43 @@
+<resources>
+    <string name="app_name">USTH Wetter</string>
+    <string name="action_settings">Einstellungen</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="next">Nächste</string>
+    <string name="previous">Letzte</string>
+
+    <!-- Days in week -->
+    <string name="monday">Montag</string>
+    <string name="tuesday">Dienstag</string>
+    <string name="wednesday">Mittwoch</string>
+    <string name="thursday">Donnerstag</string>
+    <string name="friday">Freitag</string>
+    <string name="saturday">Samstag</string>
+    <string name="sunday">Sonntag</string>
+
+    <!-- Days in week abbreviation -->
+    <string name="monday_short">Mon.</string>
+    <string name="tuesday_short">Dien.</string>
+    <string name="wednesday_short">Mitt.</string>
+    <string name="thursday_short">Don.</string>
+    <string name="friday_short">Frei.</string>
+    <string name="saturday_short">Sam.</string>
+    <string name="sunday_short">Sonn.</string>
+
+    <!-- Weathers -->
+    <string name="cloud">bewölkt</string>
+    <string name="sun">sonnig</string>
+    <string name="rain">regnet</string>
+    <string name="storm">störmig</string>
+    <string name="hail">Hageln</string>
+
+    <!-- Cities -->
+    <string name="hanoi">Hanoi</string>
+    <string name="paris">Paris</string>
+    <string name="toulouse">Toulouse</string>
+
+    <!-- Cities, Countries -->
+
+    <string name="hanoi_full">Hanoi, Vietnam</string>
+    <string name="paris_full">Paris, Frankreich</string>
+    <string name="toulouse_full">Toulouse, Frankreich</string>
+</resources>

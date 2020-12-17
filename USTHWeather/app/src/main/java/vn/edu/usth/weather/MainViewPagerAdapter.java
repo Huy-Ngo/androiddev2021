@@ -1,5 +1,6 @@
 package vn.edu.usth.weather;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -9,8 +10,11 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 public class MainViewPagerAdapter extends FragmentPagerAdapter {
-    public MainViewPagerAdapter(@NonNull FragmentManager fm) {
+    Context context;
+
+    public MainViewPagerAdapter(Context _context, @NonNull FragmentManager fm) {
         super(fm);
+        this.context = _context;
     }
 
     @NonNull
@@ -20,13 +24,13 @@ public class MainViewPagerAdapter extends FragmentPagerAdapter {
         Bundle args = new Bundle();
         switch (position) {
             case 0:
-                args.putString("city", "Hanoi");
+                args.putString("city", context.getString(R.string.hanoi));
                 break;
             case 1:
-                args.putString("city", "Paris");
+                args.putString("city", context.getString(R.string.paris));
                 break;
             case 2:
-                args.putString("city", "Toulouse");
+                args.putString("city", context.getString(R.string.toulouse));
                 break;
         }
         fragment.setArguments(args);
@@ -42,9 +46,9 @@ public class MainViewPagerAdapter extends FragmentPagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
         switch (position) {
-            case 0: return "Hanoi, Vietnam";
-            case 1: return "Paris, France";
-            case 2: return "Toulouse, France";
+            case 0: return context.getString(R.string.hanoi_full);
+            case 1: return context.getString(R.string.paris_full);
+            case 2: return context.getString(R.string.toulouse_full);
 
             default: return "Middle of nowhere";
         }

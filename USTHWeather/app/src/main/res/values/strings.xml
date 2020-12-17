@@ -24,9 +24,9 @@
     <string name="sunday_short">Sun</string>
 
     <!-- Weathers -->
-    <string name="cloud">Cloud</string>
-    <string name="sun">Sun</string>
-    <string name="rain">Rain</string>
+    <string name="cloud">Cloudy</string>
+    <string name="sun">Clear</string>
+    <string name="rain">Rainy</string>
     <string name="storm">Storm</string>
     <string name="hail">Hail</string>
 
