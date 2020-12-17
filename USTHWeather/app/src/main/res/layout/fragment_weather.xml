@@ -4,7 +4,7 @@
     android:id="@+id/fragment_weather"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#AAFFAA"
+    android:background="@drawable/frame"
     tools:context=".WeatherFragment">
 
     <TextView
