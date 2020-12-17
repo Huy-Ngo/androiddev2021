@@ -21,10 +21,6 @@ import java.util.Random;
  */
 public class ForecastFragment extends Fragment {
 
-    private static final String ARG_PARAM1 = "bgColor";
-
-    private String mBgColor;
-
     public ForecastFragment() {
         // Required empty public constructor
     }
@@ -33,23 +29,15 @@ public class ForecastFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param bgColor Parameter 1.
      * @return A new instance of fragment ForecastFragment.
      */
-    public static ForecastFragment newInstance(String bgColor) {
-        ForecastFragment fragment = new ForecastFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, bgColor);
-        fragment.setArguments(args);
-        return fragment;
+    public static ForecastFragment newInstance() {
+        return new ForecastFragment();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mBgColor = getArguments().getString(ARG_PARAM1);
-        }
     }
 
     @Override
@@ -57,21 +45,7 @@ public class ForecastFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_forecast, container, false);
-        int color;
-        switch (mBgColor) {
-            case "red":
-                color = 0x90FFC0CB;
-                break;
-            case "green":
-                color = 0x9090EE90;
-                break;
-            case "blue":
-                color = 0x90ADD8E6;
-                break;
-            default:
-                color = 0x90AAAAAA;
-                break;
-        }
+        int color = 0x90ADD8E6;
         view.setBackgroundColor(color);
 
         LinearLayout mainLayout = view.findViewById(R.id.fragment_forecast);
