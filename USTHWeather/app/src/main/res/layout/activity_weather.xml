@@ -4,20 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="15dp"
     tools:context=".WeatherActivity">
-    
-    <fragment
-        android:id="@id/fragment_weather"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        class="vn.edu.usth.weather.WeatherFragment"
-        android:layout_alignParentTop="true"/>
 
-    <FrameLayout
-        android:id="@+id/dynamic_fragment"
+    <androidx.viewpager.widget.ViewPager
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/fragment_weather"/>
+        android:id="@+id/main_pager"/>
 
 </RelativeLayout>
