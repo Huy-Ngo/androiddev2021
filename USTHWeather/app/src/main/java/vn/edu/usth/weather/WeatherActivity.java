@@ -7,6 +7,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
@@ -119,6 +120,9 @@ public class WeatherActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), R.string.refreshed, Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.action_settings:
+                Intent intent = new Intent(this.getApplicationContext(), PrefActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                this.startActivity(intent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
