@@ -40,4 +40,6 @@
     <string name="hanoi_full">Hà Nội, Việt Nam</string>
     <string name="paris_full">Paris, Pháp</string>
     <string name="toulouse_full">Toulouse, Pháp</string>
+    <string name="refresh">Làm mới</string>
+    <string name="refreshed">Đã làm mới</string>
 </resources>

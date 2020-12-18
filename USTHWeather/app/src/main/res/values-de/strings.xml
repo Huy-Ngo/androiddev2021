@@ -40,4 +40,6 @@
     <string name="hanoi_full">Hanoi, Vietnam</string>
     <string name="paris_full">Paris, Frankreich</string>
     <string name="toulouse_full">Toulouse, Frankreich</string>
+    <string name="refresh">Aktualisieren</string>
+    <string name="refreshed">Aktualisiert</string>
 </resources>
