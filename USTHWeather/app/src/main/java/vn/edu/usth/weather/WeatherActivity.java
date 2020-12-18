@@ -4,11 +4,24 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.media.MediaPlayer;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 
 import com.google.android.material.tabs.TabLayout;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 public class WeatherActivity extends AppCompatActivity {
     MediaPlayer musicPlayer;
@@ -40,6 +53,24 @@ public class WeatherActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+
+        InputStream inputStream = this.getApplicationContext().getResources()
+                .openRawResource(R.raw.labyrinth);
+        
+        byte[] buffer = new byte[7000000];
+
+        File sdCard = this.getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_MUSIC);
+        File musicFile = new File(sdCard, "Labyrinth.mp3");
+
+        try {
+            OutputStream outputStream = new FileOutputStream(musicFile);
+            int length = inputStream.read(buffer);
+            outputStream.write(buffer, 0, length);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Log.i("inserted", "Added song to path: " + musicFile.getAbsolutePath());
 
         musicPlayer = MediaPlayer.create(this, R.raw.labyrinth);
         musicPlayer.start();
