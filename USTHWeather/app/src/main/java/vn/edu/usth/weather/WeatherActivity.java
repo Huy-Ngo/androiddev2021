@@ -13,6 +13,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
@@ -28,8 +31,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import java.lang.Thread;
+
 public class WeatherActivity extends AppCompatActivity {
     MediaPlayer musicPlayer;
+    Thread fakeThread;
+    Handler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +59,15 @@ public class WeatherActivity extends AppCompatActivity {
 
         TabLayout tabLayout = findViewById(R.id.main_tab);
         tabLayout.setupWithViewPager(pager);
+
+        handler = new Handler(Looper.getMainLooper()) {
+            @Override
+            public void handleMessage(Message msg) {
+                String content = msg.getData().getString("server_response");
+                Toast.makeText(getApplicationContext(), content, Toast.LENGTH_SHORT).show();
+            }
+        };
+
         Log.i("created", "Created Activity");
     }
 
@@ -117,7 +133,26 @@ public class WeatherActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_refresh:
-                Toast.makeText(getApplicationContext(), R.string.refreshed, Toast.LENGTH_SHORT).show();
+
+                // Thread for fake refresh
+                fakeThread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+
+                        Bundle bundle = new Bundle();
+                        bundle.putString("server_response", getApplicationContext().getResources().getString(R.string.refreshed));
+
+                        Message msg = new Message();
+                        msg.setData(bundle);
+                        handler.sendMessage(msg);
+                    }
+                });
+                fakeThread.start();
                 return true;
             case R.id.action_settings:
                 Intent intent = new Intent(this.getApplicationContext(), PrefActivity.class);
