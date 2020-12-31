@@ -21,6 +21,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+import android.os.AsyncTask;
 
 import com.google.android.material.tabs.TabLayout;
 
@@ -35,8 +36,7 @@ import java.lang.Thread;
 
 public class WeatherActivity extends AppCompatActivity {
     MediaPlayer musicPlayer;
-    Thread fakeThread;
-    Handler handler;
+    AsyncTask<String, Integer, String> task;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,13 +60,6 @@ public class WeatherActivity extends AppCompatActivity {
         TabLayout tabLayout = findViewById(R.id.main_tab);
         tabLayout.setupWithViewPager(pager);
 
-        handler = new Handler(Looper.getMainLooper()) {
-            @Override
-            public void handleMessage(Message msg) {
-                String content = msg.getData().getString("server_response");
-                Toast.makeText(getApplicationContext(), content, Toast.LENGTH_SHORT).show();
-            }
-        };
 
         Log.i("created", "Created Activity");
     }
@@ -133,26 +126,33 @@ public class WeatherActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_refresh:
-
-                // Thread for fake refresh
-                fakeThread = new Thread(new Runnable() {
+                task = new AsyncTask<String, Integer, String>() {
                     @Override
-                    public void run() {
+                    protected void onPreExecute() {
+                        // do nothing
+                    }
+
+                    @Override
+                    protected String doInBackground(String... params) {
                         try {
                             Thread.sleep(1000);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-
-                        Bundle bundle = new Bundle();
-                        bundle.putString("server_response", getApplicationContext().getResources().getString(R.string.refreshed));
-
-                        Message msg = new Message();
-                        msg.setData(bundle);
-                        handler.sendMessage(msg);
+                        return getApplicationContext().getResources().getString(R.string.refreshed);
                     }
-                });
-                fakeThread.start();
+
+                    @Override
+                    protected void onProgressUpdate(Integer... values) {
+                        // Do nothing
+                    }
+
+                    @Override
+                    protected void onPostExecute(String response) {
+                        Toast.makeText(getApplicationContext(), response, Toast.LENGTH_SHORT).show();
+                    }
+                };
+                task.execute("send fake data");
                 return true;
             case R.id.action_settings:
                 Intent intent = new Intent(this.getApplicationContext(), PrefActivity.class);
