@@ -5,9 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import android.app.Fragment;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
@@ -20,6 +23,7 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.Toast;
 import android.os.AsyncTask;
 
@@ -29,14 +33,19 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+
+import java.net.URL;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 
 import java.lang.Thread;
 
 public class WeatherActivity extends AppCompatActivity {
     MediaPlayer musicPlayer;
-    AsyncTask<String, Integer, String> task;
+    AsyncTask<String, Integer, Bitmap> task;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +71,14 @@ public class WeatherActivity extends AppCompatActivity {
 
 
         Log.i("created", "Created Activity");
+    }
+
+    private void showToast(int resId) {
+        Toast.makeText(getApplicationContext(), resId, Toast.LENGTH_SHORT).show();
+    }
+
+    private void showToast(String text) {
+        Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -126,20 +143,39 @@ public class WeatherActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_refresh:
-                task = new AsyncTask<String, Integer, String>() {
+                task = new AsyncTask<String, Integer, Bitmap>() {
                     @Override
                     protected void onPreExecute() {
                         // do nothing
                     }
 
                     @Override
-                    protected String doInBackground(String... params) {
+                    protected Bitmap doInBackground(String... params) {
+                        Bitmap logo = null;
+                        URL url;
+                        HttpURLConnection connection = null;
+                        int status = 400;
                         try {
-                            Thread.sleep(1000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
+                            url = new URL(params[0]);
+                            connection = (HttpURLConnection) url.openConnection();
+                            connection.setRequestMethod("GET");
+                            connection.connect();
+                            status = connection.getResponseCode();
+                        } catch (MalformedURLException e) {
+                            Log.e("MalformedURLException", e.getMessage());
+                        } catch (IOException e) {
+                            Log.e("IOException", e.getMessage());
                         }
-                        return getApplicationContext().getResources().getString(R.string.refreshed);
+                        Log.i("Status", "Connection to USTH server responding: " + status);
+                        try {
+                            InputStream in = new BufferedInputStream(connection.getInputStream());
+                            logo = BitmapFactory.decodeStream(in);
+                        } catch (IOException e) {
+                            Log.e("IOException", e.getMessage());
+                        } finally {
+                            connection.disconnect();
+                        }
+                        return logo;
                     }
 
                     @Override
@@ -148,11 +184,14 @@ public class WeatherActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    protected void onPostExecute(String response) {
-                        Toast.makeText(getApplicationContext(), response, Toast.LENGTH_SHORT).show();
+                    protected void onPostExecute(Bitmap response) {
+                        Log.i("Bitmap", "Received bitmap: " + response);
+                        ImageView view = findViewById(R.id.mainlogo);
+                        view.setImageBitmap(response);
+                        showToast(R.string.refreshed);
                     }
                 };
-                task.execute("send fake data");
+                task.execute("https://usth.edu.vn/uploads/tin-tuc/2019_12/logo-usth-pa3-01.png");
                 return true;
             case R.id.action_settings:
                 Intent intent = new Intent(this.getApplicationContext(), PrefActivity.class);
