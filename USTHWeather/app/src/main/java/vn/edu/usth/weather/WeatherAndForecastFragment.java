@@ -1,5 +1,6 @@
 package vn.edu.usth.weather;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -11,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.ImageView;
 
 public class WeatherAndForecastFragment extends Fragment {
     private static final String ARG_PARAM1 = "city";
@@ -46,6 +48,17 @@ public class WeatherAndForecastFragment extends Fragment {
         cityName.setText(mCity);
 
         return view;
+    }
+
+    public void setLogo(Bitmap bitmap) {
+        ImageView logo = this.getView().findViewById(R.id.logo);
+        logo.setImageBitmap(bitmap);
+    }
+
+    public void setWeather(Weather weather) {
+        ImageView icon = this.getView().findViewById(R.id.weather_icon);
+        // TODO: Implement this
+        logo.setImageBitmap(bitmap);
     }
 
 }

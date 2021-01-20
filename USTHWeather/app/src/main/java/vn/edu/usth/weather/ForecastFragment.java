@@ -1,5 +1,6 @@
 package vn.edu.usth.weather;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -118,4 +119,5 @@ public class ForecastFragment extends Fragment {
 
         return view;
     }
+
 }

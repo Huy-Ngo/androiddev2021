@@ -1,6 +1,7 @@
 package vn.edu.usth.weather;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -9,32 +10,39 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
+import java.util.ArrayList;
+
 public class MainViewPagerAdapter extends FragmentPagerAdapter {
     Context context;
+    ArrayList<WeatherAndForecastFragment> fragments;
 
     public MainViewPagerAdapter(Context _context, @NonNull FragmentManager fm) {
         super(fm);
         this.context = _context;
+        this.fragments = new ArrayList<WeatherAndForecastFragment>();
+        for (int i = 0; i < 3; ++i) {
+            WeatherAndForecastFragment fragment = new WeatherAndForecastFragment();
+            Bundle args = new Bundle();
+            switch (i) {
+                case 0:
+                    args.putString("city", context.getString(R.string.hanoi));
+                    break;
+                case 1:
+                    args.putString("city", context.getString(R.string.paris));
+                    break;
+                case 2:
+                    args.putString("city", context.getString(R.string.toulouse));
+                    break;
+            }
+            fragment.setArguments(args);
+            this.fragments.add(fragment);
+        }
     }
 
     @NonNull
     @Override
     public Fragment getItem(int position) {
-        Fragment fragment = new WeatherAndForecastFragment();
-        Bundle args = new Bundle();
-        switch (position) {
-            case 0:
-                args.putString("city", context.getString(R.string.hanoi));
-                break;
-            case 1:
-                args.putString("city", context.getString(R.string.paris));
-                break;
-            case 2:
-                args.putString("city", context.getString(R.string.toulouse));
-                break;
-        }
-        fragment.setArguments(args);
-        return fragment;
+        return fragments.get(position);
     }
 
     @Override
@@ -51,6 +59,18 @@ public class MainViewPagerAdapter extends FragmentPagerAdapter {
             case 2: return context.getString(R.string.toulouse_full);
 
             default: return "Middle of nowhere";
+        }
+    }
+
+    public void setLogo(Bitmap bitmap) {
+        for (WeatherAndForecastFragment fragment:fragments) {
+            fragment.setLogo(bitmap);
+        }
+    }
+
+    public void setWeather(Weather weather) {
+        for (WeatherAndForecastFragment fragment:fragments) {
+            fragment.setWeather(weather);
         }
     }
 }

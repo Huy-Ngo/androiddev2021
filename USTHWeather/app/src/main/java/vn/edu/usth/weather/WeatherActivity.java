@@ -11,6 +11,7 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.ImageReader;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
@@ -27,6 +28,10 @@ import android.widget.ImageView;
 import android.widget.Toast;
 import android.os.AsyncTask;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.ImageRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.material.tabs.TabLayout;
 
 import java.io.File;
@@ -43,12 +48,18 @@ import java.net.MalformedURLException;
 
 import java.lang.Thread;
 
+import org.json.JSONObject;
+
 public class WeatherActivity extends AppCompatActivity {
     MediaPlayer musicPlayer;
     AsyncTask<String, Integer, Bitmap> task;
+    RequestQueue queue;
+    MainViewPagerAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        queue = Volley.newRequestQueue(this);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weather);
         ForecastFragment forecastFragment = new ForecastFragment();
@@ -58,7 +69,7 @@ public class WeatherActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction().setReorderingAllowed(true).add(
                 R.id.main_pager, forecastFragment).commit();
 
-        PagerAdapter adapter = new MainViewPagerAdapter(
+        adapter = new MainViewPagerAdapter(
                 this.getApplicationContext(),
                 getSupportFragmentManager()
         );
@@ -138,60 +149,56 @@ public class WeatherActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
+    
+    private void getLogo() {
+        Response.Listener<Bitmap> listener =
+                new Response.Listener<Bitmap>() {
+                    @Override
+                    public void onResponse(Bitmap response) {
+                        /*
+                        ImageView main = findViewById(R.id.mainlogo);
+                        ImageView sub = findViewById(R.id.logo);
+                        main.setImageBitmap(response);
+                        sub.setImageBitmap(response);
+                        */
+                        adapter.setLogo(response);
+                    }
+                };
+        ImageRequest imagerequest = new ImageRequest(
+                "https://usth.edu.vn/uploads/tin-tuc/2019_12/logo-usth-pa3-01.png",
+                listener, 0, 0, ImageView.ScaleType.CENTER,
+                Bitmap.Config.ARGB_8888, null
+        );
+        queue.add(imagerequest);
+    }
+
+    private void getWeather(String city) {
+        Response.Listener<JSONObject> listener =
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Weather weather = new Weather(response);
+                        adapter.setWeather(weather);
+                    }
+                };
+        String key = "633f282ec292b27cee1371842180da61";
+        String url = "http://api.openweathermap.org/data/2.5/weather?q=" + city;
+        url += "appid=" + key;
+        url += "units=metric";
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.GET,
+                url, null, listener
+        );
+        queue.add(imagerequest);
+
+    }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_refresh:
-                task = new AsyncTask<String, Integer, Bitmap>() {
-                    @Override
-                    protected void onPreExecute() {
-                        // do nothing
-                    }
-
-                    @Override
-                    protected Bitmap doInBackground(String... params) {
-                        Bitmap logo = null;
-                        URL url;
-                        HttpURLConnection connection = null;
-                        int status = 400;
-                        try {
-                            url = new URL(params[0]);
-                            connection = (HttpURLConnection) url.openConnection();
-                            connection.setRequestMethod("GET");
-                            connection.connect();
-                            status = connection.getResponseCode();
-                        } catch (MalformedURLException e) {
-                            Log.e("MalformedURLException", e.getMessage());
-                        } catch (IOException e) {
-                            Log.e("IOException", e.getMessage());
-                        }
-                        Log.i("Status", "Connection to USTH server responding: " + status);
-                        try {
-                            InputStream in = new BufferedInputStream(connection.getInputStream());
-                            logo = BitmapFactory.decodeStream(in);
-                        } catch (IOException e) {
-                            Log.e("IOException", e.getMessage());
-                        } finally {
-                            connection.disconnect();
-                        }
-                        return logo;
-                    }
-
-                    @Override
-                    protected void onProgressUpdate(Integer... values) {
-                        // Do nothing
-                    }
-
-                    @Override
-                    protected void onPostExecute(Bitmap response) {
-                        Log.i("Bitmap", "Received bitmap: " + response);
-                        ImageView view = findViewById(R.id.mainlogo);
-                        view.setImageBitmap(response);
-                        showToast(R.string.refreshed);
-                    }
-                };
-                task.execute("https://usth.edu.vn/uploads/tin-tuc/2019_12/logo-usth-pa3-01.png");
+                getLogo();
+                showToast(R.string.refreshed);
                 return true;
             case R.id.action_settings:
                 Intent intent = new Intent(this.getApplicationContext(), PrefActivity.class);
