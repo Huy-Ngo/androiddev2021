@@ -8,6 +8,7 @@ import androidx.viewpager.widget.ViewPager;
 import android.app.Fragment;
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -28,9 +29,12 @@ import android.widget.ImageView;
 import android.widget.Toast;
 import android.os.AsyncTask;
 
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.tabs.TabLayout;
 
@@ -55,6 +59,7 @@ public class WeatherActivity extends AppCompatActivity {
     AsyncTask<String, Integer, Bitmap> task;
     RequestQueue queue;
     MainViewPagerAdapter adapter;
+    ViewPager pager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +78,7 @@ public class WeatherActivity extends AppCompatActivity {
                 this.getApplicationContext(),
                 getSupportFragmentManager()
         );
-        ViewPager pager = findViewById(R.id.main_pager);
+        pager = findViewById(R.id.main_pager);
         pager.setOffscreenPageLimit(3);
         pager.setAdapter(adapter);
 
@@ -155,12 +160,6 @@ public class WeatherActivity extends AppCompatActivity {
                 new Response.Listener<Bitmap>() {
                     @Override
                     public void onResponse(Bitmap response) {
-                        /*
-                        ImageView main = findViewById(R.id.mainlogo);
-                        ImageView sub = findViewById(R.id.logo);
-                        main.setImageBitmap(response);
-                        sub.setImageBitmap(response);
-                        */
                         adapter.setLogo(response);
                     }
                 };
@@ -173,24 +172,31 @@ public class WeatherActivity extends AppCompatActivity {
     }
 
     private void getWeather(String city) {
+        final Context ctx = this;
         Response.Listener<JSONObject> listener =
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Weather weather = new Weather(response);
-                        adapter.setWeather(weather);
+                        Weather weather = new Weather(
+                                ctx, response);
+                        adapter.setWeather(weather, pager.getCurrentItem());
                     }
                 };
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("Get Weather", "Something wrong in retrieving JSON " + error);
+            }
+        };
         String key = "633f282ec292b27cee1371842180da61";
-        String url = "http://api.openweathermap.org/data/2.5/weather?q=" + city;
-        url += "appid=" + key;
-        url += "units=metric";
+        String url = "https://api.openweathermap.org/data/2.5/weather?q=" + city;
+        url += "&appid=" + key;
+        url += "&units=metric";
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.GET,
-                url, null, listener
+                url, null, listener, errorListener
         );
-        queue.add(imagerequest);
-
+        queue.add(request);
     }
 
     @Override
@@ -198,6 +204,22 @@ public class WeatherActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_refresh:
                 getLogo();
+                String city;
+                switch(pager.getCurrentItem()) {
+                    case 0:
+                        city = "Hanoi";
+                        break;
+                    case 1:
+                        city = "Paris";
+                        break;
+                    case 2:
+                        city = "Toulouse";
+                        break;
+                    default:
+                        city = "Hanoi";
+                        break;
+                }
+                getWeather(city);
                 showToast(R.string.refreshed);
                 return true;
             case R.id.action_settings:

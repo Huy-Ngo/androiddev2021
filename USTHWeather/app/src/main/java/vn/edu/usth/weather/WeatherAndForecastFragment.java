@@ -57,8 +57,10 @@ public class WeatherAndForecastFragment extends Fragment {
 
     public void setWeather(Weather weather) {
         ImageView icon = this.getView().findViewById(R.id.weather_icon);
+        TextView description = this.getView().findViewById(R.id.weather_description);
         // TODO: Implement this
-        logo.setImageBitmap(bitmap);
+        icon.setImageResource(weather.icon);
+        description.setText(weather.temperature + "°C\n" + weather.description);
     }
 
 }

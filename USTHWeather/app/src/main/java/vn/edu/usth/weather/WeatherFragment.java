@@ -48,7 +48,7 @@ public class WeatherFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_weather, container, false);
-        TextView weather = view.findViewById(R.id.fragment_weather_weathertext);
+        TextView weather = view.findViewById(R.id.weather_description);
         TextView cityName = view.findViewById(R.id.fragment_weather_city);
         weather.setText(String.format("12°C\n%s", this.requireContext().getString(R.string.cloud)));
         cityName.setText(mCity);

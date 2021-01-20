@@ -68,9 +68,7 @@ public class MainViewPagerAdapter extends FragmentPagerAdapter {
         }
     }
 
-    public void setWeather(Weather weather) {
-        for (WeatherAndForecastFragment fragment:fragments) {
-            fragment.setWeather(weather);
-        }
+    public void setWeather(Weather weather, int position) {
+        fragments.get(position).setWeather(weather);
     }
 }
